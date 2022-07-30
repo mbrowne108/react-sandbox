@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import GenerateList from "./GenerateList.js";
 
 function App() {
+  const [activities, setActivities] = useState([])
+  const [counter, setCounter] = useState(1)
+  
+  function newActivityClick() {
+    setCounter(() => counter + 1)
+  }
+
+  useEffect(() => {
+    fetch("https://www.boredapi.com/api/activity")
+      .then(r => r.json())
+      .then(activity => setActivities([...activities, activity]))
+  }, [counter])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={newActivityClick}>Generate Activity</button>
+      <GenerateList activities={activities}/>
     </div>
-  );
+  )
 }
 
 export default App;
